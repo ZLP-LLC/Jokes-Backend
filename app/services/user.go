@@ -34,7 +34,7 @@ func (s UserService) Register(q *models.RegisterRequest) (models.RegisterRespons
 	user := models.User{
 		Username: q.Username,
 		Password: q.Password,
-		Role:     "user",
+		Role:     models.UserRole,
 	}
 
 	if err := s.repository.Create(&user); err != nil {

@@ -5,11 +5,18 @@ import (
 	"gorm.io/gorm"
 )
 
+type Role string
+
+const (
+	AdminRole Role = "admin"
+	UserRole       = "user"
+)
+
 type User struct {
 	gorm.Model
 	Username *string `gorm:"unique"`
 	Password string
-	Role     string
+	Role     Role
 }
 
 // TableName gives table name of model
@@ -31,5 +38,5 @@ func (user *User) BeforeSave(tx *gorm.DB) error {
 // Структура ответа на GET запрос
 type UserGetResponse struct {
 	Username *string `json:"username"`
-	Role     string  `json:"role"`
+	Role     Role    `json:"role"`
 }

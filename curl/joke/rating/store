@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# Base
+if ! source "${BASH_SOURCE%/*}/../../base"; then
+  exit 1
+fi
+
+token=${USER_TOKEN:-$("${BASH_SOURCE%/*}"/../../auth/login | jq -r '.token')}
+
+joke_id=${1:-$("${BASH_SOURCE%/*}"/../list | jq -r '.[0].id')}
+rating=${2:-"$(seq 0 .01 1 | shuf | head -n1 | tr , .)"}
+
+# Отправляем POST-запрос для оценки анекдота
+res=$(curl -s -X POST "$api_url/$joke_url/$joke_id/$joke_rating_url" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $token" \
+  -d '{
+  "rating": '"$rating"'
+  }'
+)
+
+# Проверяем, успешна ли оценка
+if echo "$res" | jq -re '.error' 1>/dev/null 2>&1; then
+    echo "$res" | jq 1>&2
+    exit 1
+fi
+
+# Результат
+echo "$res" | jq

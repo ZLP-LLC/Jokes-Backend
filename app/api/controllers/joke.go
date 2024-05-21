@@ -13,17 +13,20 @@ import (
 )
 
 type JokeController struct {
-	logger  lib.Logger
-	service domains.JokeService
+	logger        lib.Logger
+	service       domains.JokeService
+	ratingService domains.RatingService
 }
 
 func NewJokeController(
 	logger lib.Logger,
 	service domains.JokeService,
+	ratingService domains.RatingService,
 ) JokeController {
 	return JokeController{
-		logger:  logger,
-		service: service,
+		logger:        logger,
+		service:       service,
+		ratingService: ratingService,
 	}
 }
 
@@ -53,9 +56,18 @@ func (c JokeController) Get(ctx *gin.Context) {
 		return
 	}
 
+	rating, err := c.ratingService.GetAverage(uint(id))
+	// TODO: Обработка ошибок
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
 	resp := models.JokeGetResponse{
 		ID:     joke.ID,
-		Rating: 1, // TODO: Добавить рейтинг
+		Rating: rating,
 		Text:   joke.Text,
 	}
 
@@ -75,9 +87,18 @@ func (c JokeController) List(ctx *gin.Context) {
 
 	var resp []models.JokeGetResponse
 	for _, joke := range jokes {
+		rating, err := c.ratingService.GetAverage(joke.ID)
+		// TODO: Обработка ошибок
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+
 		resp = append(resp, models.JokeGetResponse{
 			ID:     joke.ID,
-			Rating: 1, // TODO: Добавить рейтинг
+			Rating: rating,
 			Text:   joke.Text,
 		})
 	}

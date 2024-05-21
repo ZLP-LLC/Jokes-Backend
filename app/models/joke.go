@@ -6,7 +6,7 @@ import (
 
 type Joke struct {
 	gorm.Model
-	Text   string
+	Text string
 }
 
 // TableName gives table name of model
@@ -16,7 +16,7 @@ func (m Joke) TableName() string {
 
 // Структура ответа на GET запрос
 type JokeGetResponse struct {
-	ID     uint   `json:"id"`
-	Rating uint   `json:"rating"`
-	Text   string `json:"text"`
+	ID     uint    `json:"id"`
+	Rating float64 `json:"rating"`
+	Text   string  `json:"text"`
 }

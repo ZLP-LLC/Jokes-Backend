@@ -6,6 +6,7 @@ import "go.uber.org/fx"
 var Module = fx.Options(
 	fx.Provide(NewCorsMiddleware),
 	fx.Provide(NewJWTAuthMiddleware),
+	fx.Provide(NewRoleMiddleware),
 	fx.Provide(NewDatabaseTrx),
 	fx.Provide(NewMiddlewares),
 )
@@ -24,11 +25,13 @@ func NewMiddlewares(
 	corsMiddleware CorsMiddleware,
 	dbTrxMiddleware DatabaseTrx,
 	authMiddleware JWTAuthMiddleware,
+	roleMiddleware RoleMiddleware,
 ) Middlewares {
 	return Middlewares{
 		corsMiddleware,
 		dbTrxMiddleware,
 		authMiddleware,
+		roleMiddleware,
 	}
 }
 

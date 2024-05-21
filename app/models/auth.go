@@ -15,7 +15,7 @@ type RegisterRequest struct {
 
 type RegisterResponse struct {
 	Username string `json:"username"`
-	Role     string `json:"role"`
+	Role     Role   `json:"role"`
 }
 
 // Login

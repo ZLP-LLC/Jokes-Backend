@@ -7,4 +7,5 @@ var Module = fx.Options(
 	fx.Provide(NewUserService),
 	fx.Provide(NewJWTAuthService),
 	fx.Provide(NewJokeService),
+	fx.Provide(NewRatingService),
 )

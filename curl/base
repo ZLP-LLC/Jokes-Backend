@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-api_url=${API_URL:-"http://localhost:8080/api/v1"}
+export api_url=${API_URL:-"http://localhost:8080/api/v1"}
 health_url=${HEALTH_URL:-"readiness"}
 
 export register_url="auth/register"

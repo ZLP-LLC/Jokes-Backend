@@ -6,6 +6,7 @@ health_url=${HEALTH_URL:-"readiness"}
 export register_url="auth/register"
 export login_url="auth/login"
 export user_url="user"
+export joke_url="joke"
 
 # Проверка доступности сервера
 if ! curl "$api_url/$health_url" 1>/dev/null 2>&1; then

@@ -42,7 +42,7 @@ func NewDatabase(env Env, logger Logger) Database {
 	}
 	logger.Info("Connected to database")
 
-	if err := db.AutoMigrate(&models.User{}); err != nil {
+	if err := db.AutoMigrate(&models.User{}, &models.Joke{}); err != nil {
 		logger.Panic("Can't migrate database: ", err.Error())
 	}
 	logger.Info("Migrated database")

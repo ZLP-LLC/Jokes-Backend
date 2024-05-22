@@ -13,17 +13,20 @@ import (
 )
 
 type RatingController struct {
-	logger  lib.Logger
-	service domains.RatingService
+	logger       lib.Logger
+	service      domains.RatingService
+	errorHandler lib.ErrorHandler
 }
 
 func NewRatingController(
 	logger lib.Logger,
 	service domains.RatingService,
+	errorHandler lib.ErrorHandler,
 ) RatingController {
 	return RatingController{
-		logger:  logger,
-		service: service,
+		logger:       logger,
+		service:      service,
+		errorHandler: errorHandler,
 	}
 }
 
@@ -49,6 +52,12 @@ func (c RatingController) Store(ctx *gin.Context) {
 	if err := ctx.ShouldBindJSON(&rating); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": "Invalid request body",
+		})
+		return
+	}
+	if err := c.errorHandler.IsValid(rating); err != nil {
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{
+			"error": c.errorHandler.ParseValidationErrors(err),
 		})
 		return
 	}

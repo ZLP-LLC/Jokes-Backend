@@ -30,7 +30,6 @@ func NewDatabase(env Env, logger Logger) Database {
 	})
 
 	if err != nil {
-		// Это же удобно...
 		logger.Info("Connect to sqlite...")
 		dsn = "test.db"
 		db, err = gorm.Open(sqlite.Open(dsn), &gorm.Config{
@@ -42,10 +41,20 @@ func NewDatabase(env Env, logger Logger) Database {
 	}
 	logger.Info("Connected to database")
 
-	if err := db.AutoMigrate(&models.User{}, &models.Joke{}, &models.Rating{}); err != nil {
+	if err := db.AutoMigrate(&models.User{}, &models.Joke{}, &models.Rating{}, &models.Annotation{}); err != nil {
 		logger.Panic("Can't migrate database: ", err.Error())
 	}
 	logger.Info("Migrated database")
+
+	// TEST: test data
+	//err = db.Create(&models.Joke{Text: "test"}).Error
+	//if err != nil {
+	//	logger.Errorln(err.Error())
+	//}
+	//err = db.Create(&models.Annotation{Text: "test", JokeID: 1, Approved: true}).Error
+	//if err != nil {
+	//	logger.Errorln(err.Error())
+	//}
 
 	return Database{
 		db,

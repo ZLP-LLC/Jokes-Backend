@@ -8,6 +8,7 @@ export login_url="auth/login"
 export user_url="user"
 export joke_url="joke"
 export joke_rating_url="rating"
+export joke_annotation_url="annotations"
 
 # Проверка доступности сервера
 if ! curl "$api_url/$health_url" 1>/dev/null 2>&1; then

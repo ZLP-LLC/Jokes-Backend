@@ -36,3 +36,7 @@ func (r AnnotationRepository) List(jokeID uint) ([]models.Annotation, error) {
 		Find(&annotations).Error
 	return annotations, err
 }
+
+func (r AnnotationRepository) Store(annotation *models.Annotation) error {
+	return r.Database.Create(&annotation).Error
+}

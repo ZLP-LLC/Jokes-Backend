@@ -33,3 +33,7 @@ func (s AnnotationService) List(jokeID uint) ([]models.Annotation, error) {
 	rating, err := s.repository.List(jokeID)
 	return rating, err
 }
+
+func (s AnnotationService) Store(rating *models.Annotation) error {
+	return s.repository.Store(rating)
+}

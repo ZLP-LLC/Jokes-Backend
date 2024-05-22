@@ -30,7 +30,7 @@ func NewRatingController(
 	}
 }
 
-// Get
+// Store
 func (c RatingController) Store(ctx *gin.Context) {
 	param := ctx.Param("id")
 	if param == "" {

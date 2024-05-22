@@ -7,7 +7,7 @@ fi
 
 joke_id=${1:-$("${BASH_SOURCE%/*}"/../list | jq -r '.[0].id')}
 
-# Отправляем GET-запрос для получени аннотаций
+# Отправляем GET-запрос для получения аннотаций
 res=$(curl -s -X GET "$api_url/$joke_url/$joke_id/$joke_annotation_url" \
   -H "Content-Type: application/json"
 )

@@ -18,7 +18,10 @@ type AnnotationRoutes struct {
 func (s AnnotationRoutes) Setup() {
 	root := s.handler.Gin.Group("/api/v1")
 	{
-		root.GET("/joke/:id/annotations", s.controller.List)
+		root.
+			GET("/joke/:id/annotations", s.controller.List)
+		root.Use(s.authMiddleware.Handler()).
+			POST("/joke/:id/annotations", s.controller.Store)
 	}
 }
 

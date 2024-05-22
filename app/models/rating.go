@@ -21,5 +21,5 @@ type RatingStoreResponse struct {
 }
 
 type RatingStoreRequest struct {
-	Rating float64 `json:"rating"`
+	Rating float64 `json:"rating" validate:"min=0,max=1"`
 }

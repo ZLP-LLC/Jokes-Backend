@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# Base
+if ! source "${BASH_SOURCE%/*}/../../base"; then
+  exit 1
+fi
+
+joke_id=${1:-$("${BASH_SOURCE%/*}"/../list | jq -r '.[0].id')}
+
+# Отправляем GET-запрос для получения аннотаций
+res=$(curl -s -X GET "$api_url/$joke_url/$joke_id/$joke_annotation_url" \
+  -H "Content-Type: application/json"
+)
+
+# Проверяем, успешно ли получение
+if echo "$res" | jq -re '.error' 1>/dev/null 2>&1; then
+    echo "$res" | jq 1>&2
+    exit 1
+fi
+
+# Результат
+echo "$res" | jq

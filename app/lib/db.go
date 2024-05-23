@@ -55,6 +55,10 @@ func NewDatabase(env Env, logger Logger) Database {
 	//if err != nil {
 	//	logger.Errorln(err.Error())
 	//}
+	//err = db.Create(&models.Rating{JokeID: 1, UserID: 1}).Error
+	//if err != nil {
+	//	logger.Errorln(err.Error())
+	//}
 
 	return Database{
 		db,

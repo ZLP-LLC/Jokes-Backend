@@ -9,6 +9,8 @@ type Rating struct {
 	Rating float64
 	JokeID uint
 	Joke   Joke `gorm:"foreignKey:JokeID"`
+	UserID uint
+	User   User `gorm:"foreignKey:UserID"`
 }
 
 // TableName gives table name of model

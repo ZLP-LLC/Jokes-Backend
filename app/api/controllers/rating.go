@@ -64,6 +64,7 @@ func (c RatingController) Store(ctx *gin.Context) {
 
 	err = c.service.Store(&models.Rating{
 		JokeID: uint(id),
+		UserID: ctx.GetUint(constants.UserID),
 		Rating: rating.Rating,
 	})
 	if err != nil {

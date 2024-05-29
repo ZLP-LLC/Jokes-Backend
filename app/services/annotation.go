@@ -1,6 +1,10 @@
 package services
 
 import (
+	"errors"
+	"fmt"
+	"strings"
+
 	"gorm.io/gorm"
 
 	"jokes/domains"
@@ -34,6 +38,24 @@ func (s AnnotationService) List(jokeID uint) ([]models.Annotation, error) {
 	return rating, err
 }
 
-func (s AnnotationService) Store(rating *models.Annotation) error {
-	return s.repository.Store(rating)
+func (s AnnotationService) Store(annotation *models.Annotation) error {
+	// Проверка на вшивость
+	annotations, err := s.repository.List(annotation.JokeID)
+	if err != nil {
+		return err
+	}
+
+	var collides []string
+	for _, model := range annotations {
+		if ((annotation.From >= model.From) && (annotation.From <= model.To)) ||
+			((annotation.To >= model.From) && (annotation.To <= model.To)) ||
+			((annotation.From <= model.From) && (annotation.To >= model.To)) {
+			collides = append(collides, fmt.Sprintf("%v", model.ID))
+		}
+	}
+	if len(collides) != 0 {
+		return errors.New(fmt.Sprintf("annotation collides with other annotations: %s", strings.Join(collides, ", ")))
+	}
+
+	return s.repository.Store(annotation)
 }

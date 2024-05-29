@@ -31,8 +31,8 @@ type AnnotationGetResponse struct {
 // Store
 type AnnotationStoreRequest struct {
 	Text string `json:"text"`
-	From uint   `json:"from" validate:"min=1"`
-	To   uint   `json:"to" validate:"min=1"`
+	From uint   `json:"from"`
+	To   uint   `json:"to"`
 }
 
 type AnnotationStoreResponse struct {

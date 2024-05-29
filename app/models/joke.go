@@ -20,3 +20,12 @@ type JokeGetResponse struct {
 	Rating float64 `json:"rating"`
 	Text   string  `json:"text"`
 }
+
+// Store
+type JokeStoreRequest struct {
+	Text string `json:"text"`
+}
+
+type JokeStoreResponse struct {
+	Text string `json:"text"`
+}

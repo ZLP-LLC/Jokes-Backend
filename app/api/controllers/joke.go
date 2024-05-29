@@ -15,17 +15,20 @@ import (
 type JokeController struct {
 	logger        lib.Logger
 	service       domains.JokeService
+	errorHandler  lib.ErrorHandler
 	ratingService domains.RatingService
 }
 
 func NewJokeController(
 	logger lib.Logger,
 	service domains.JokeService,
+	errorHandler lib.ErrorHandler,
 	ratingService domains.RatingService,
 ) JokeController {
 	return JokeController{
 		logger:        logger,
 		service:       service,
+		errorHandler:  errorHandler,
 		ratingService: ratingService,
 	}
 }
@@ -101,6 +104,39 @@ func (c JokeController) List(ctx *gin.Context) {
 			Rating: rating,
 			Text:   joke.Text,
 		})
+	}
+
+	ctx.JSON(http.StatusOK, resp)
+}
+
+// Store
+func (c JokeController) Store(ctx *gin.Context) {
+	var joke models.JokeStoreRequest
+	// TODO: Обработка ошибок
+	if err := ctx.ShouldBindJSON(&joke); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid request body",
+		})
+		return
+	}
+	if err := c.errorHandler.IsValid(joke); err != nil {
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{
+			"error": c.errorHandler.ParseValidationErrors(err),
+		})
+		return
+	}
+
+	if err := c.service.Store(&models.Joke{
+		Text: joke.Text,
+	}); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	resp := models.JokeStoreResponse{
+		Text: joke.Text,
 	}
 
 	ctx.JSON(http.StatusOK, resp)

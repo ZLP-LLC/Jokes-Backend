@@ -44,3 +44,7 @@ func (s JokeService) List() ([]models.Joke, error) {
 	}
 	return jokes, nil
 }
+
+func (s JokeService) Store(joke *models.Joke) error {
+	return s.repository.Store(joke)
+}

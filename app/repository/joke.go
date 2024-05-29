@@ -39,3 +39,7 @@ func (r JokeRepository) Get(id uint) (models.Joke, error) {
 	err := r.Database.Where("id = ?", id).First(&joke).Error
 	return joke, err
 }
+
+func (r JokeRepository) Store(joke *models.Joke) error {
+	return r.Database.Create(&joke).Error
+}

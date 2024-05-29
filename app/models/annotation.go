@@ -12,7 +12,7 @@ type Annotation struct {
 	Text     string
 	From     uint
 	To       uint
-	Approved bool `gorm:"default:false"`
+	Approved bool `gorm:"default:true"` // WARN:
 }
 
 // TableName gives table name of model
